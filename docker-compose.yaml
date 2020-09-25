@@ -1,0 +1,45 @@
+version: "3"
+services:
+
+  heliosbd:
+    image: postgres:9        
+    container_name: heliosbd
+    expose:
+        - 5432
+    environment:
+      POSTGRES_DB: helios
+      POSTGRES_USER: helios
+      POSTGRES_PASSWORD: helios       
+      PGDATA: /var/lib/postgresql/data
+      POSTGRES_HOST_AUTH_METHOD: md5      
+    volumes:
+     - ./bd:/var/lib/postgresql/data          
+    restart: always    
+    networks:
+        - heliosnetwork
+      
+  heliosapp:
+    build:
+      dockerfile: Helios.Dockerfile
+      context: .       
+    image: helios
+    container_name: heliosapp
+    ports:        
+        - "443:443"
+        - "8080:80"
+    expose:        
+        - 443
+        - 80        
+    volumes:
+     - ./helios-server:/var/www/html/helios     
+    depends_on: 
+     - heliosbd
+    networks:
+        - heliosnetwork 
+    
+    command: python manage.py runserver 0.0.0.0:80
+    command: /usr/sbin/apache2ctl -D FOREGROUND
+    
+networks:
+    heliosnetwork:
+        driver: bridge   
