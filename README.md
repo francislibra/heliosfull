@@ -41,7 +41,6 @@ ou
 docker ps
 ```
 
-
 4. execute o script (start.sh) para executação das migrations
 
 ```
@@ -51,9 +50,10 @@ docker ps
 Esse script executa a migration do django e ajustes nos campos das tabelas de auth_users.
 
 5. faça os ajustes no settings.py
-   
-   O settings.py já estabelece a conexão do container postgresql (heliosbd).
-   Entretanto, demais ajustes para envio de email, ldap, etc. devem ser realizados.
+
+O settings.py já estabelece a conexão do container postgresql (heliosbd).
+Entretanto, demais ajustes para envio de email, ldap, etc. devem ser realizados.
+
 
 ## Ajustes futuros
 
