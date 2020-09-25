@@ -17,9 +17,11 @@ docker e docker-compose:
 
 ## Como executar
 
-1. clone o repositório [git clone https://git.unifesp.br/votacao-unifesp/heliosdocker.git]
+### Clonar repositório
 
-2. acesse a pasta criada e execute:
+- clone o repositório [git clone https://git.unifesp.br/votacao-unifesp/heliosdocker.git]
+
+- acesse a pasta criada e execute:
 
 ```
 docker-compose -u -d
@@ -30,7 +32,7 @@ serão criados dois containers:
 - heliosbd (postgresql)
 
 
-3. verifique se os container estão ativos
+- verifique se os container estão ativos
 
 ```
 docker-compose ps
@@ -41,7 +43,7 @@ ou
 docker ps
 ```
 
-4. execute o script (start.sh) para executação das migrations
+- execute o script (start.sh) para executação das migrations
 
 ```
 ./start.sh
@@ -49,7 +51,7 @@ docker ps
 
 Esse script executa a migration do django e ajustes nos campos das tabelas de auth_users.
 
-5. faça os ajustes no settings.py
+- faça os ajustes no settings.py
 
 O settings.py já estabelece a conexão do container postgresql (heliosbd).
 Entretanto, demais ajustes para envio de email, ldap, etc. devem ser realizados.
