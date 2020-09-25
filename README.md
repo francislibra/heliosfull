@@ -4,7 +4,7 @@
 
 ## Observações
 
-Essa é uma versão inicial para docker baseada no repositório do IFSC que provê autenticação LDAP.
+Essa é uma proposta inicial do Helios Voting adaptado para ser executado em container docker e baseado na versão publicada no repositório do IFSC.
 
 Para detalhes acesse: [https://github.com/ifsc/helios-server]
 
@@ -55,6 +55,21 @@ Esse script executa apenas a migration do django e ajustes na tabela de auth_use
 
 O settings.py já estabelece a conexão do container postgresql (heliosbd).
 Entretanto, demais ajustes para envio de email, ldap, etc. devem ser realizados.
+
+
+### Execução
+
+O container será executado na porta 8080 do host.
+Dessa forma, abra o navegador e acesse 
+```
+http://localhost:8080.
+```
+
+Se necessário, altere o IP no arquivo settings.py na pasta /helios-server, especificamente no parâmetro:
+
+```
+ALLOWED_HOSTS = get_from_env('ALLOWED_HOSTS', '*').split(",")
+```
 
 
 ## Ajustes futuros
