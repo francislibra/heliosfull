@@ -31,7 +31,8 @@ services:
         - 443
         - 80        
     volumes:
-     - ./helios-server:/var/www/html/helios     
+     - ./helios-server:/var/www/html/helios
+     - ./apache:/etc/apache2/sites-available
     depends_on: 
      - heliosbd
     networks:
