@@ -221,7 +221,7 @@ LOGOUT_ON_CONFIRMATION = True
 
 # The two hosts are here so the main site can be over plain HTTP
 # while the voting URLs are served over SSL.
-#URL_HOST = get_from_env("URL_HOST", "http://localhost:80/").rstrip("/")
+URL_HOST = get_from_env("URL_HOST", "http://localhost:8080/").rstrip("/")
 
 # IMPORTANT: you should not change this setting once you've created
 # elections, as your elections' cast_url will then be incorrect.
@@ -229,7 +229,7 @@ LOGOUT_ON_CONFIRMATION = True
 SECURE_URL_HOST = get_from_env("SECURE_URL_HOST", URL_HOST).rstrip("/")
 
 # election stuff
-SITE_TITLE = get_from_env('SITE_TITLE', _('UNIFESP - Sistema de Eleição'))
+SITE_TITLE = get_from_env('SITE_TITLE', _('UNIFESP - Sistema de Votação'))
 MAIN_LOGO_URL = get_from_env('MAIN_LOGO_URL', '/static/logo.png')
 ALLOW_ELECTION_INFO_URL = (get_from_env('ALLOW_ELECTION_INFO_URL', '0') == '1')
 
@@ -327,10 +327,10 @@ TEST_RUNNER = 'djcelery.contrib.test_runner.CeleryTestSuiteRunner'
 # this effectively does CELERY_ALWAYS_EAGER = True
 
 # see configuration example at https://pythonhosted.org/django-auth-ldap/example.html
-AUTH_LDAP_SERVER_URI = "ldap://server" # replace by your Ldap URI
-AUTH_LDAP_BIND_DN = "cn=read-only-admin,dc=example,dc=com"
-AUTH_LDAP_BIND_PASSWORD = "password"
-AUTH_LDAP_USER_SEARCH = LDAPSearch("dc=example,dc=com",
+AUTH_LDAP_SERVER_URI = "ldap://vml-ldap01.epm.br" # replace by your Ldap URI
+AUTH_LDAP_BIND_DN = "cn=admin,dc=unifesp,dc=br"
+AUTH_LDAP_BIND_PASSWORD = "5S49e1tt"
+AUTH_LDAP_USER_SEARCH = LDAPSearch("dc=unifesp,dc=br",
     ldap.SCOPE_SUBTREE, "(uid=%(user)s)"
 )
 
