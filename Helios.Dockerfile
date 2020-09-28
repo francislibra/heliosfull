@@ -25,8 +25,8 @@ RUN cd /var/www/html/helios &&\
 COPY conf/settings.py /var/www/html/helios/settings.py
 COPY conf/apache-selfsigned.key /etc/ssl/private/apache-selfsigned.key 
 COPY conf/apache-selfsigned.crt /etc/ssl/certs/apache-selfsigned.crt 
-COPY conf/helios.conf /etc/apache2/sites-available/helios.conf 
-COPY conf/helios-ssl.conf /etc/apache2/sites-available/helios-ssl.conf
+COPY apache/helios.conf /etc/apache2/sites-available/helios.conf 
+COPY apache/helios-ssl.conf /etc/apache2/sites-available/helios-ssl.conf
 
 RUN a2enmod rewrite && \
     a2enmod ssl && \
