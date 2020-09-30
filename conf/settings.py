@@ -16,7 +16,8 @@ def get_from_env(var, default):
     else:
         return default
 
-DEBUG = (get_from_env('DEBUG', '1') == '1')
+#DEBUG = 0 
+DEBUG = (get_from_env('DEBUG', '0') == '0')
 TEMPLATE_DEBUG = DEBUG
 
 #If the Host header (or X-Forwarded-Host if USE_X_FORWARDED_HOST is enabled) does not match any value in this list, the django.http.HttpRequest.get_host() method will raise SuspiciousOperation.
@@ -25,10 +26,12 @@ TEMPLATE_DEBUG = DEBUG
 #More info: https://docs.djangoproject.com/en/1.7/ref/settings/#allowed-hosts
 
 # set a value for production environment, alongside with debug set to false
+#ALLOWED_HOSTS = get_from_env('ALLOWED_HOSTS', 'localhost').split(",")
 ALLOWED_HOSTS = get_from_env('ALLOWED_HOSTS', '*').split(",")
+#ALLOWED_HOSTS = ['vml038.epm.br','votacao.unifesp.br']
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = get_from_env('SECRET_KEY', 'replaceme')
+SECRET_KEY = get_from_env('SECRET_KEY', 'j-s8n7m2)l-jn4rpxhxg+d%go#!hbhsb-$z233oemm@8+um6hs')
 ROOT_URLCONF = 'urls'
 
 ROOT_PATH = os.path.dirname(__file__)
@@ -36,7 +39,7 @@ ROOT_PATH = os.path.dirname(__file__)
 # add admins of the form: 
 #    ('Ben Adida', 'ben@adida.net'),
 # if you want to be emailed about errors.
-ADMINS = (
+ADMINS = ('STI UNIFESP', 'sti@unifesp.br'
 )
 
 MANAGERS = ADMINS
@@ -62,7 +65,6 @@ DATABASES = {
         'PORT': '5432',
     }
 }
-
 SOUTH_DATABASE_ADAPTERS = {'default':'south.db.postgresql_psycopg2'}
 
 # override if we have an env variable
@@ -212,7 +214,7 @@ VOTER_UPLOAD_REL_PATH = "voters/%Y/%m/%d"
 
 
 # Change your email settings
-DEFAULT_FROM_EMAIL = get_from_env('DEFAULT_FROM_EMAIL', 'sti@unifesp.br')
+DEFAULT_FROM_EMAIL = get_from_env('DEFAULT_FROM_EMAIL', 'votacao.helios@unifesp.br')
 DEFAULT_FROM_NAME = get_from_env('DEFAULT_FROM_NAME', 'Sistema de Votação Eletrônica')
 SERVER_EMAIL = '%s <%s>' % (DEFAULT_FROM_NAME, DEFAULT_FROM_EMAIL)
 
@@ -221,15 +223,18 @@ LOGOUT_ON_CONFIRMATION = True
 
 # The two hosts are here so the main site can be over plain HTTP
 # while the voting URLs are served over SSL.
-URL_HOST = get_from_env("URL_HOST", "http://localhost:8080/").rstrip("/")
+#URL_HOST = get_from_env("URL_HOST", SECURE_URL_HOST).rstrip("/")
+URL_HOST = get_from_env("URL_HOST", "http://votacao.unifesp.br:8000").rstrip("/")
+#URL_HOST = ["http://votacao.unifesp.br:8000", "http://vml038.epm.br:8000"]
 
 # IMPORTANT: you should not change this setting once you've created
 # elections, as your elections' cast_url will then be incorrect.
 # SECURE_URL_HOST = "https://localhost:8443"
 SECURE_URL_HOST = get_from_env("SECURE_URL_HOST", URL_HOST).rstrip("/")
+#SECURE_URL_HOST = get_from_env("SECURE_URL_HOST", "https://votacao.unifesp.br:8443").rstrip("/")
 
 # election stuff
-SITE_TITLE = get_from_env('SITE_TITLE', _('UNIFESP - Sistema de Votação'))
+SITE_TITLE = get_from_env('SITE_TITLE', _('UNIFESP - Sistema de Votação Eletrôncia'))
 MAIN_LOGO_URL = get_from_env('MAIN_LOGO_URL', '/static/logo.png')
 ALLOW_ELECTION_INFO_URL = (get_from_env('ALLOW_ELECTION_INFO_URL', '0') == '1')
 
@@ -237,9 +242,9 @@ ALLOW_ELECTION_INFO_URL = (get_from_env('ALLOW_ELECTION_INFO_URL', '0') == '1')
 FOOTER_LINKS = json.loads(get_from_env('FOOTER_LINKS', '[]'))
 FOOTER_LOGO_URL = get_from_env('FOOTER_LOGO_URL', None)
 
-WELCOME_MESSAGE = get_from_env('WELCOME_MESSAGE', _('Bem Vindo! Sistema de Votação da UNIFESP'))
+WELCOME_MESSAGE = get_from_env('WELCOME_MESSAGE', _('Bem-vindo ao Sistema de Votação Eletrôncia - UNIFESP'))
 
-HELP_EMAIL_ADDRESS = get_from_env('HELP_EMAIL_ADDRESS', 'sti@unifesp.br')
+HELP_EMAIL_ADDRESS = get_from_env('HELP_EMAIL_ADDRESS', 'votacao.helios@unifesp.br')
 
 AUTH_TEMPLATE_BASE = "server_ui/templates/base.html"
 HELIOS_TEMPLATE_BASE = "server_ui/templates/base.html"
@@ -292,11 +297,18 @@ CLEVER_CLIENT_ID = get_from_env('CLEVER_CLIENT_ID', "")
 CLEVER_CLIENT_SECRET = get_from_env('CLEVER_CLIENT_SECRET', "")
 
 # email server
-EMAIL_HOST = get_from_env('EMAIL_HOST', 'localhost')
-EMAIL_PORT = int(get_from_env('EMAIL_PORT', "2525"))
-EMAIL_HOST_USER = get_from_env('EMAIL_HOST_USER', '')
-EMAIL_HOST_PASSWORD = get_from_env('EMAIL_HOST_PASSWORD', '')
-EMAIL_USE_TLS = (get_from_env('EMAIL_USE_TLS', '0') == '1')
+#EMAIL_HOST =  'smtp-relay.gmail.com'
+EMAIL_HOST = get_from_env('EMAIL_HOST', 'smtp-relay.gmail.com')
+#EMAIL_PORT = '587'
+EMAIL_PORT = int(get_from_env('EMAIL_PORT', '587'))
+#EMAIL_HOST_USER = 'votacao.helios@unifesp.br'
+EMAIL_HOST_USER = get_from_env('EMAIL_HOST_USER', 'votacao.helios@unifesp.br')
+#EMAIL_HOST_PASSWORD = 'Hel10$email'
+EMAIL_HOST_PASSWORD = get_from_env('EMAIL_HOST_PASSWORD', 'Hel10$email')
+#EMAIL_HOST_PASSWORD = get_from_env('EMAIL_HOST_PASSWORD', '')
+#EMAIL_USE_TLS = False
+EMAIL_USE_TLS = (get_from_env('EMAIL_USE_TLS', '0') == '0')
+#EMAIL_USE_TLS = get_from_env('EMAIL_USE_TLS', '1')
 
 # to use AWS Simple Email Service
 # in which case environment should contain

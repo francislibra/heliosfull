@@ -1,10 +1,6 @@
 # -*- coding: utf-8 -*-
-import ldap
 import os, json
 
-from django.utils.translation import ugettext_lazy as _
-
-from django_auth_ldap.config import LDAPSearch, GroupOfNamesType
 # a massive hack to see if we're testing, in which case we use different settings
 import sys
 TESTING = 'test' in sys.argv
@@ -19,20 +15,6 @@ def get_from_env(var, default):
 DEBUG = (get_from_env('DEBUG', '1') == '1')
 TEMPLATE_DEBUG = DEBUG
 
-#If the Host header (or X-Forwarded-Host if USE_X_FORWARDED_HOST is enabled) does not match any value in this list, the django.http.HttpRequest.get_host() method will raise SuspiciousOperation.
-#When DEBUG is True or when running tests, host validation is disabled; any host will be accepted. Thus it’s usually only necessary to set it in production.
-#This validation only applies via get_host(); if your code accesses the Host header directly from request.META you are bypassing this security protection.
-#More info: https://docs.djangoproject.com/en/1.7/ref/settings/#allowed-hosts
-
-# set a value for production environment, alongside with debug set to false
-ALLOWED_HOSTS = get_from_env('ALLOWED_HOSTS', '*').split(",")
-
-# Make this unique, and don't share it with anybody.
-SECRET_KEY = get_from_env('SECRET_KEY', 'replaceme')
-ROOT_URLCONF = 'urls'
-
-ROOT_PATH = os.path.dirname(__file__)
-
 # add admins of the form: 
 #    ('Ben Adida', 'ben@adida.net'),
 # if you want to be emailed about errors.
@@ -46,7 +28,8 @@ MASTER_HELIOS = (get_from_env('MASTER_HELIOS', '0') == '1')
 
 # show ability to log in? (for example, if the site is mostly used by voters)
 # if turned off, the admin will need to know to go to /auth/login manually
-SHOW_LOGIN_OPTIONS = (get_from_env('SHOW_LOGIN_OPTIONS', '1') == '1')
+SHOW_LOGIN_OPTIONS = (get_from_env('SHOW_LOGIN_OPTIONS', '0') == '1')
+SHOW_LOGIN_TOOLBAR = (get_from_env('SHOW_LOGIN_TOOLBAR', '1') == '1')
 
 # sometimes, when the site is not that social, it's not helpful
 # to display who created the election
@@ -55,11 +38,11 @@ SHOW_USER_INFO = (get_from_env('SHOW_USER_INFO', '1') == '1')
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'HOST': 'localhost',
+        'PORT': '5432',
         'NAME': 'helios',
         'USER': 'helios',
-        'PASSWORD': 'helios',
-        'HOST': 'heliosbd',
-        'PORT': '5432',
+        'PASSWORD': 'helios'        
     }
 }
 
@@ -81,20 +64,16 @@ if get_from_env('DATABASE_URL', None):
 # If running in a Windows environment this must be set to the same as your
 # system time zone.
 TIME_ZONE = 'America/Sao_Paulo'
+
+# Language code for this installation. All choices can be found here:
+# http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'pt-br'
+
 SITE_ID = 1
+
+# If you set this to False, Django will make some optimizations so as not
+# to load the internationalization machinery.
 USE_I18N = True
-USE_TZ = True
-
-LANGUAGES = (
-    ('en', _('English')),
-    ('pt-br', _('Brazilian Portuguese')),
-)
-
-LOCALE_PATHS = (
-    ROOT_PATH + '/locale',
-)
-
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
@@ -110,22 +89,14 @@ MEDIA_URL = ''
 # Examples: "http://foo.com/media/", "/media/".
 STATIC_URL = '/media/'
 
-STATIC_ROOT = ROOT_PATH + '/sitestatic'
-
-STATICFILES_DIRS = (
-    ROOT_PATH + '/heliosbooth',
-    ROOT_PATH + '/heliosverifier',
-    ROOT_PATH + '/helios_auth/media',
-    ROOT_PATH + '/helios/media',
-    ROOT_PATH + '/server_ui/media',
-    ROOT_PATH + '/heliosinstitution/media/',
-)
-
+# Make this unique, and don't share it with anybody.
+SECRET_KEY = get_from_env('SECRET_KEY', 'replaceme')
 
 # If debug is set to false and ALLOWED_HOSTS is not declared, django raises  "CommandError: You must set settings.ALLOWED_HOSTS if DEBUG is False."
 # If in production, you got a bad request (400) error
 #More info: https://docs.djangoproject.com/en/1.7/ref/settings/#allowed-hosts (same for 1.6)
 
+ALLOWED_HOSTS = get_from_env('ALLOWED_HOSTS', 'localhost').split(",")
 
 # Secure Stuff
 if (get_from_env('SSL', '0') == '1'):
@@ -166,27 +137,23 @@ MIDDLEWARE_CLASSES = (
 
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware'
-
-   # 'flatpages_i18n.middleware.FlatpageFallbackMiddleware'
+    'django.contrib.auth.middleware.AuthenticationMiddleware'
 )
 
+ROOT_URLCONF = 'urls'
 
+ROOT_PATH = os.path.dirname(__file__)
 TEMPLATE_DIRS = (
     ROOT_PATH,
     os.path.join(ROOT_PATH, 'templates')
 )
 
 INSTALLED_APPS = (
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
+#    'django.contrib.auth',
+#    'django.contrib.contenttypes',
     'djangosecure',
     'django.contrib.sessions',
-    'django.contrib.sites',
-    'django.contrib.staticfiles',
-    'django.contrib.messages',
-    'django.contrib.admin',
+    #'django.contrib.sites',
     ## needed for queues
     'djcelery',
     'kombu.transport.django',
@@ -196,8 +163,6 @@ INSTALLED_APPS = (
     'helios_auth',
     'helios',
     'server_ui',
-    'helioslog',
-    'heliosinstitution',
 )
 
 ##
@@ -212,8 +177,8 @@ VOTER_UPLOAD_REL_PATH = "voters/%Y/%m/%d"
 
 
 # Change your email settings
-DEFAULT_FROM_EMAIL = get_from_env('DEFAULT_FROM_EMAIL', 'heliosvoting.pt@gmail.com')
-DEFAULT_FROM_NAME = get_from_env('DEFAULT_FROM_NAME', 'Sistema de Votação Eletrônica')
+DEFAULT_FROM_EMAIL = get_from_env('DEFAULT_FROM_EMAIL', 'ben@adida.net')
+DEFAULT_FROM_NAME = get_from_env('DEFAULT_FROM_NAME', 'Ben for Helios')
 SERVER_EMAIL = '%s <%s>' % (DEFAULT_FROM_NAME, DEFAULT_FROM_EMAIL)
 
 LOGIN_URL = '/auth/'
@@ -221,7 +186,7 @@ LOGOUT_ON_CONFIRMATION = True
 
 # The two hosts are here so the main site can be over plain HTTP
 # while the voting URLs are served over SSL.
-URL_HOST = get_from_env("URL_HOST", "http://172.19.0.3:8080/").rstrip("/")
+URL_HOST = get_from_env("URL_HOST", "http://localhost:8000").rstrip("/")
 
 # IMPORTANT: you should not change this setting once you've created
 # elections, as your elections' cast_url will then be incorrect.
@@ -229,7 +194,7 @@ URL_HOST = get_from_env("URL_HOST", "http://172.19.0.3:8080/").rstrip("/")
 SECURE_URL_HOST = get_from_env("SECURE_URL_HOST", URL_HOST).rstrip("/")
 
 # election stuff
-SITE_TITLE = get_from_env('SITE_TITLE', _('UNIFESP - Sistema de Eleição'))
+SITE_TITLE = get_from_env('SITE_TITLE', u'Sistema de Votação')
 MAIN_LOGO_URL = get_from_env('MAIN_LOGO_URL', '/static/logo.png')
 ALLOW_ELECTION_INFO_URL = (get_from_env('ALLOW_ELECTION_INFO_URL', '0') == '1')
 
@@ -237,14 +202,12 @@ ALLOW_ELECTION_INFO_URL = (get_from_env('ALLOW_ELECTION_INFO_URL', '0') == '1')
 FOOTER_LINKS = json.loads(get_from_env('FOOTER_LINKS', '[]'))
 FOOTER_LOGO_URL = get_from_env('FOOTER_LOGO_URL', None)
 
-WELCOME_MESSAGE = get_from_env('WELCOME_MESSAGE', _('Bem Vindo! Sistema de Votação da UNIFESP'))
+WELCOME_MESSAGE = get_from_env('WELCOME_MESSAGE', u'Bem-vindo ao Sistema de Votação')
 
-HELP_EMAIL_ADDRESS = get_from_env('HELP_EMAIL_ADDRESS', 'shirlei@gmail.com')
+HELP_EMAIL_ADDRESS = get_from_env('HELP_EMAIL_ADDRESS', 'help@heliosvoting.org')
 
 AUTH_TEMPLATE_BASE = "server_ui/templates/base.html"
 HELIOS_TEMPLATE_BASE = "server_ui/templates/base.html"
-AUTH_TEMPLATE_BASENONAV = "server_ui/templates/basenonav.html"
-HELIOS_TEMPLATE_BASENONAV = "server_ui/templates/basenonav.html"
 HELIOS_ADMIN_ONLY = False
 HELIOS_VOTERS_UPLOAD = True
 HELIOS_VOTERS_EMAIL = True
@@ -254,10 +217,8 @@ HELIOS_PRIVATE_DEFAULT = True
 
 # authentication systems enabled
 #AUTH_ENABLED_AUTH_SYSTEMS = ['password','facebook','twitter', 'google', 'yahoo']
-#AUTH_ENABLED_AUTH_SYSTEMS = get_from_env('AUTH_ENABLED_AUTH_SYSTEMS', 'shibboleth').split(",")
-#AUTH_DEFAULT_AUTH_SYSTEM = get_from_env('AUTH_DEFAULT_AUTH_SYSTEM', 'shibboleth')
-AUTH_ENABLED_AUTH_SYSTEMS = get_from_env('AUTH_ENABLED_AUTH_SYSTEMS', 'ldap').split(",")
-AUTH_DEFAULT_AUTH_SYSTEM = get_from_env('AUTH_DEFAULT_AUTH_SYSTEM', 'ldap')
+AUTH_ENABLED_AUTH_SYSTEMS = get_from_env('AUTH_ENABLED_AUTH_SYSTEMS', 'password').split(",")
+AUTH_DEFAULT_AUTH_SYSTEM = get_from_env('AUTH_DEFAULT_AUTH_SYSTEM', 'password')
 
 # google
 GOOGLE_CLIENT_ID = get_from_env('GOOGLE_CLIENT_ID', '')
@@ -319,59 +280,11 @@ CELERY_RESULT_DBURI = DATABASES['default']
 import djcelery
 djcelery.setup_loader()
 
-CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
 
-CELERY_TASK_RESULT_EXPIRES = 5184000 # 60 days
 # for testing
 TEST_RUNNER = 'djcelery.contrib.test_runner.CeleryTestSuiteRunner'
 # this effectively does CELERY_ALWAYS_EAGER = True
 
-# see configuration example at https://pythonhosted.org/django-auth-ldap/example.html
-AUTH_LDAP_SERVER_URI = "ldap://server.br" # replace by your Ldap URI
-AUTH_LDAP_BIND_DN = ""
-AUTH_LDAP_BIND_PASSWORD = ""
-AUTH_LDAP_USER_SEARCH = LDAPSearch("dc=,dc=br",
-    ldap.SCOPE_SUBTREE, "(uid=%(user)s)"
-)
-
-AUTH_LDAP_USER_ATTR_MAP = {
-    "first_name": "cn",
-    "last_name": "sn",
-    "email": "mail",
-}
-
-AUTH_LDAP_BIND_AS_AUTHENTICATING_USER = True
-
-AUTH_LDAP_ALWAYS_UPDATE_USER = True
-
-AUTH_BIND_USERID_TO_VOTERID = ['ldap']
-
-# Shibboleth auth settings
-SHIBBOLETH_ATTRIBUTE_MAP = { 
-    #"Shibboleth-givenName": (True, "first_name"),
-    "Shib-inetOrgPerson-cn": (True, "common_name"),
-    "Shib-inetOrgPerson-sn": (True, "last_name"),
-    "Shib-inetOrgPerson-mail": (True, "email"),
-    "Shib-eduPerson-eduPersonPrincipalName": (True, "eppn"),
-    "Shib-brEduPerson-brEduAffiliationType": (True, "affiliation"),
-    "Shib-Identity-Provider": (True, "identity_provider"),
-}
-
-FEDERATION_NAME = "CAFe Expresso"
-
-# To use some manager-specific attributes, like idp address
-USE_ELECTION_MANAGER_ATTRIBUTES = True
-
-ELECTION_MANAGER_ATTRIBUTES = ['Provider']
-
-INSTITUTION_ROLE = ['Institution Admin','Election Admin']
-
-ATTRIBUTES_AUTOMATICALLY_CHECKED = ['brExitDate']
-
-SESSION_EXPIRE_AT_BROWSER_CLOSE = True
-
-USE_EMBEDDED_DS = False
-# end shibboleth auth settings
 # Rollbar Error Logging
 ROLLBAR_ACCESS_TOKEN = get_from_env('ROLLBAR_ACCESS_TOKEN', None)
 if ROLLBAR_ACCESS_TOKEN:
@@ -381,21 +294,3 @@ if ROLLBAR_ACCESS_TOKEN:
     'access_token': ROLLBAR_ACCESS_TOKEN,
     'environment': 'development' if DEBUG else 'production',  
   }
-
-FEATURE_ELECTION = False
-
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'null': {
-            'class': 'logging.NullHandler',
-        }
-    },
-    'loggers': {
-        'django.security.DisallowedHost': {
-            'handlers' : ['null'],
-            'propagate': False,
-        }
-     }
-}
