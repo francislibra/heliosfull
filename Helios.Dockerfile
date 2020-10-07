@@ -1,10 +1,7 @@
 FROM python:2.7
-ENV user helios
-USER root
+
 RUN apt-get update && \
     apt-get install -y -q \
-    libsasl2-dev \
-    libldap2-dev \
     python-ldap \
     python-dev \    
     libsasl2-dev \
@@ -20,13 +17,15 @@ RUN apt-get update && \
 RUN mkdir /home/eleicao && \
     mkdir /var/log/eleicao
 
-COPY /volumes/helios-server /home/eleicao
+COPY volumes/helios-server /home/eleicao
 
 RUN cd /home/eleicao &&\
     pip install -r requirements.txt   
 
-COPY volumes/certs/apache-selfsigned.key /etc/ssl/private/apache-selfsigned.key
-COPY volumes/certs/apache-selfsigned.crt /etc/ssl/certs/apache-selfsigned.crt
+
+COPY volumes/certs/unifesp.key /etc/ssl/private-unifesp/unifesp.key
+COPY volumes/certs/intermediate.pem /etc/ssl/private-unifesp/intermediate.pem
+COPY volumes/certs/unifesp.crt /etc/ssl/private-unifesp/unifesp.crt
 COPY volumes/supervisor/eleicao.conf /etc/supervisor/conf.d/eleicao.conf
 COPY volumes/apache/eleicao.conf /etc/apache2/sites-available/eleicao.conf
 COPY volumes/apache/eleicao-ssl.conf /etc/apache2/sites-available/eleicao-ssl.conf    
@@ -37,10 +36,6 @@ RUN a2enmod rewrite && \
     a2ensite eleicao-ssl.conf && \
     a2ensite eleicao.conf && \
     service apache2 restart
-
-RUN useradd -m -d /home/${user} ${user} && \ 
-    usermod -a -G www-data,root ${user} && \
-    chown -R --from=root ${user} /home/eleicao    
 
 WORKDIR /home/eleicao    
 EXPOSE 80

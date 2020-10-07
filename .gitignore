@@ -36,6 +36,8 @@
 ehthumbs.db
 Thumbs.db
 
-bd/
+
+volumes/helios-servers/settings.py
 clear.sh
 conf/settings.py
+volumes/bd
