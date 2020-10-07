@@ -49,7 +49,7 @@ docker ps
 ./start.sh
 ```
 
-Esse script executa apenas a migration do django e ajustes na tabela de auth_users.
+Esse script executa a migration do django e ajustes na tabela de auth_users.
 
 ### Faça os ajustes no settings.py
 
@@ -59,7 +59,7 @@ Entretanto, demais ajustes para envio de email, ldap, etc. devem ser realizados.
 
 ### Execução
 
-O container será executado na porta 8080 do host.
+O container será executado na porta 8080 do host mas será redirecionado para 443 (https)
 Dessa forma, abra o navegador e acesse 
 ```
 http://localhost:8080.
@@ -71,11 +71,21 @@ Se necessário, altere o IP no arquivo settings.py na pasta /helios-server, espe
 ALLOWED_HOSTS = get_from_env('ALLOWED_HOSTS', '*').split(",")
 ```
 
+### Volumes
+
+Todos os mapeamentos estão na pasta /volumes.  São eles:
+
+    - ./volumes/helios-server:/home/eleicao
+    - ./volumes/apache:/etc/apache2/sites-available
+    - ./volumes/log:/var/log/apache2
+    - ./volumes/certs:/etc/ssl/private-unifesp
+    - ./volumes/bd:/var/lib/postgresql/data
+
 
 ## Ajustes futuros
 
 1. Migração para alpine
 2. Adição da camada de load balance com nginx
-3. Separação da camada httpd
+3. Separação do apache ou nginx
 4. Aprimorar processo de inicialização do container
 
