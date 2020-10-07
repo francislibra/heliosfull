@@ -23,9 +23,9 @@ docker e docker-compose:
 
 - acesse a pasta criada e execute:
 
-```
-docker-compose -u -d
-```
+    ```
+    docker-compose -u -d
+    ```
 
 - serão criados dois containers:
     - heliosapp (helios)
@@ -34,14 +34,9 @@ docker-compose -u -d
 
 ### Verifique se os container estão ativos
 
-```
-docker-compose ps
-```
-ou
-
-```
-docker ps
-```
+    ```
+    docker-compose ps
+    ```
 
 ### Execute o script (start.sh) para executação das migrations
 
@@ -49,18 +44,14 @@ docker ps
 ./start.sh
 ```
 
-Esse script executa a migration do django e ajustes na tabela de auth_users.
-
-### Faça os ajustes no settings.py
-
-O settings.py já estabelece a conexão do container postgresql (heliosbd).
-Entretanto, demais ajustes para envio de email, ldap, etc. devem ser realizados.
+Esse script executa a migration do django e ajustes na tabela auth_users.
 
 
 ### Execução
 
 O container será executado na porta 8080 do host mas será redirecionado para 443 (https)
-Dessa forma, abra o navegador e acesse 
+
+Abra o navegador e acesse:
 ```
 http://localhost:8080.
 ```
@@ -70,6 +61,12 @@ Se necessário, altere o IP no arquivo settings.py na pasta /helios-server, espe
 ```
 ALLOWED_HOSTS = get_from_env('ALLOWED_HOSTS', '*').split(",")
 ```
+
+### Faça os ajustes no settings.py
+
+O settings.py já estabelece a conexão do container postgresql (heliosbd).
+Entretanto, demais ajustes para envio de email, ldap, etc. devem ser realizados.
+
 
 ### Volumes
 
