@@ -28,7 +28,6 @@ TEMPLATE_DEBUG = DEBUG
 # set a value for production environment, alongside with debug set to false
 #ALLOWED_HOSTS = get_from_env('ALLOWED_HOSTS', 'localhost').split(",")
 ALLOWED_HOSTS = get_from_env('ALLOWED_HOSTS', '*').split(",")
-#ALLOWED_HOSTS = ['vml038.epm.br','votacao.unifesp.br']
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = get_from_env('SECRET_KEY', 'j-s8n7m2)l-jn4rpxhxg+d%go#!hbhsb-$z233oemm@8+um6hs')
