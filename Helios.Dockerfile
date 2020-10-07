@@ -16,21 +16,21 @@ RUN apt-get update && \
     supervisor && \       
     rm -rf /var/lib/apt/lists/* && \
     apt-get clean
-    
+
 RUN mkdir /home/eleicao && \
     mkdir /var/log/eleicao
 
-COPY /helios-server /home/eleicao
+COPY /volumes/helios-server /home/eleicao
 
 RUN cd /home/eleicao &&\
     pip install -r requirements.txt   
 
-COPY certs/apache-selfsigned.key /etc/ssl/private/apache-selfsigned.key
-COPY certs/apache-selfsigned.crt /etc/ssl/certs/apache-selfsigned.crt
-COPY supervisor/eleicao.conf /etc/supervisor/conf.d/eleicao.conf
-COPY apache/eleicao.conf /etc/apache2/sites-available/eleicao.conf
-COPY apache/eleicao-ssl.conf /etc/apache2/sites-available/eleicao-ssl.conf    
-    
+COPY volumes/certs/apache-selfsigned.key /etc/ssl/private/apache-selfsigned.key
+COPY volumes/certs/apache-selfsigned.crt /etc/ssl/certs/apache-selfsigned.crt
+COPY volumes/supervisor/eleicao.conf /etc/supervisor/conf.d/eleicao.conf
+COPY volumes/apache/eleicao.conf /etc/apache2/sites-available/eleicao.conf
+COPY volumes/apache/eleicao-ssl.conf /etc/apache2/sites-available/eleicao-ssl.conf    
+
 RUN a2enmod rewrite && \
     a2enmod ssl && \
     a2dissite 000-default.conf && \    

@@ -1,11 +1,10 @@
 version: "3"
 services:
-
   heliosbd:
-    image: postgres:9        
+    image: postgres:9
     container_name: heliosbd
     expose:
-        - 5432
+      - 5432
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
@@ -13,36 +12,38 @@ services:
       PGDATA: ${PGDATA}
       POSTGRES_HOST_AUTH_METHOD: ${AUTH_METHOD}
     volumes:
-     - ./bd:/var/lib/postgresql/data          
-    restart: always    
+      - .volumes/bd:/var/lib/postgresql/data
+    restart: unless-stopped
     networks:
-        - heliosnetwork
-      
+      - heliosnetwork
+
   heliosapp:
-    build:      
+    build:
       dockerfile: Helios.Dockerfile
-      context: .    
+      context: .
     image: helios
     container_name: heliosapp
-    ports:        
-        - "443:443"
-        - "8080:80"
-    expose:        
-        - 443
-        - 80            
+    ports:
+      - "443:443"
+      - "8080:80"
+    expose:
+      - 443
+      - 80
     volumes:
-     - ./helios-server:/home/eleicao
-     - ./apache:/etc/apache2/sites-available
-     #- ./ssl/certs:/etc/ssl/certs
-     #- ./ssl/private:/etc/ssl/private
-    depends_on: 
-     - heliosbd
+      - .volumes/helios-server:/home/eleicao
+      - .volumes/apache:/etc/apache2/sites-available
+      - .volumes/log:/var/log/apache2
+      - .volumes/certs:/etc/ssl/private-unifesp
+    restart: unless-stopped
+    depends_on:
+      - heliosbd
     networks:
-        - heliosnetwork 
-    
-    command: python manage.py runserver 0.0.0.0:80
-    command: /usr/sbin/apache2ctl -D FOREGROUND
-    
+      - heliosnetwork
+
+    command: >
+      bash -c "python manage.py runserver 0.0.0.0:80
+      && /usr/sbin/apache2ctl -D FOREGROUND"
+
 networks:
-    heliosnetwork:
-        driver: bridge   
+  heliosnetwork:
+    driver: bridge
