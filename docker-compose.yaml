@@ -5,17 +5,13 @@ services:
     container_name: heliosbd
     expose:
       - 5432
-    environment:
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_USER}
-      PGDATA: ${PGDATA}
-      POSTGRES_HOST_AUTH_METHOD: ${AUTH_METHOD}
+    env_file:
+      - .env
     volumes:
       - ./volumes/bd:/var/lib/postgresql/data
     restart: unless-stopped
     networks:
-      - heliosnetwork
+      - heliosnetwork      
 
   heliosapp:
     build:
@@ -29,16 +25,8 @@ services:
     expose:
       - 443
       - 80
-    environment:
-      POSTGRES_HOST: ${POSTGRES_HOST}
-      POSTGRES_DB: ${POSTGRES_DB}      
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_PORT: ${POSTGRES_PORT}
-      SECRET_KEY: ${SECRET_KEY}
-      SITE_TITLE: ${SITE_TITLE}
-      ADMINS_NAME: ${ADMINS_NAME}
-      ADMINS_EMAIL: ${ADMINS_EMAIL}
+    env_file:
+      - .env
     volumes:
       - ./volumes/helios-server:/home/eleicao
       - ./volumes/apache:/etc/apache2/sites-available
@@ -48,7 +36,7 @@ services:
     depends_on:
       - heliosbd
     networks:
-      - heliosnetwork
+      - heliosnetwork          
 
     command: python manage.py runserver 0.0.0.0:${PORT_HOST}
     command: /usr/sbin/apache2ctl -D FOREGROUND
@@ -56,3 +44,10 @@ services:
 networks:
   heliosnetwork:
     driver: bridge
+    ipam:
+     config:
+       - subnet: 10.8.0.0/16
+         gateway: 10.8.0.1
+         aux_adressess:
+            heliosbd: 10.8.0.2
+            heliiosapp: 10.8.0.3

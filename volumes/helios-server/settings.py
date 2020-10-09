@@ -16,8 +16,8 @@ def get_from_env(var, default):
     else:
         return default
 
-#DEBUG = 0 
-DEBUG = (get_from_env('DEBUG', '0') == '0')
+DEBUG = (get_from_env('DEBUG', '0'))
+#DEBUG = (get_from_env('DEBUG', '0') == '0')
 TEMPLATE_DEBUG = DEBUG
 
 #If the Host header (or X-Forwarded-Host if USE_X_FORWARDED_HOST is enabled) does not match any value in this list, the django.http.HttpRequest.get_host() method will raise SuspiciousOperation.
@@ -30,8 +30,7 @@ TEMPLATE_DEBUG = DEBUG
 ALLOWED_HOSTS = get_from_env('ALLOWED_HOSTS', 'h-votacao.unifesp.br').split(",")
 
 # Make this unique, and don't share it with anybody.
-#SECRET_KEY = get_from_env('SECRET_KEY', 'j-s8n7m2)l-jn4rpxhxg+d%go#!hbhsb-$z233oemm@8+um6hs')
-SECRET_KEY = os.getenv('SECRET_KEY')
+SECRET_KEY = get_from_env('SECRET_KEY', 'j-s8n7m2)l-jn4rpxhxg+dxRgo#!hbhsb-$z233oemm@8+um6hs')
 ROOT_URLCONF = 'urls'
 
 ROOT_PATH = os.path.dirname(__file__)
@@ -58,13 +57,14 @@ SHOW_USER_INFO = (get_from_env('SHOW_USER_INFO', '1') == '1')
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.getenv('POSTGRES_DB'),
-        'USER': os.getenv('POSTGRES_USER'),
-        'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
-        'HOST': os.getenv('POSTGRES_HOST'),
-        'PORT': os.getenv('POSTGRES_PORT'),
+        'NAME': get_from_env('POSTGRES_DB','bd'),
+        'USER': get_from_env('POSTGRES_USER','user'),
+        'PASSWORD': get_from_env('POSTGRES_PASSWORD','pass'),
+        'HOST': get_from_env('POSTGRES_HOST','localhost'),
+        'PORT': get_from_env('POSTGRES_PORT','5432'),
     }
 }
+
 SOUTH_DATABASE_ADAPTERS = {'default':'south.db.postgresql_psycopg2'}
 
 # override if we have an env variable
@@ -226,8 +226,6 @@ LOGOUT_ON_CONFIRMATION = True
 #URL_HOST = get_from_env("URL_HOST", SECURE_URL_HOST).rstrip("/")
 URL_HOST = get_from_env("URL_HOST", "https://h-votacao.unifesp.br").rstrip("/")
 
-
-
 # IMPORTANT: you should not change this setting once you've created
 # elections, as your elections' cast_url will then be incorrect.
 # SECURE_URL_HOST = "https://localhost:8443"
@@ -297,18 +295,12 @@ CLEVER_CLIENT_ID = get_from_env('CLEVER_CLIENT_ID', "")
 CLEVER_CLIENT_SECRET = get_from_env('CLEVER_CLIENT_SECRET', "")
 
 # email server
-#EMAIL_HOST =  'smtp-relay.gmail.com'
+
 EMAIL_HOST = get_from_env('EMAIL_HOST', 'smtp-relay.gmail.com')
-#EMAIL_PORT = '587'
 EMAIL_PORT = int(get_from_env('EMAIL_PORT', '587'))
-#EMAIL_HOST_USER = 'votacao.helios@unifesp.br'
 EMAIL_HOST_USER = get_from_env('EMAIL_HOST_USER', 'votacao.helios@unifesp.br')
-#EMAIL_HOST_PASSWORD = 'Hel10$email'
 EMAIL_HOST_PASSWORD = get_from_env('EMAIL_HOST_PASSWORD', 'Hel10$email')
-#EMAIL_HOST_PASSWORD = get_from_env('EMAIL_HOST_PASSWORD', '')
-#EMAIL_USE_TLS = False
 EMAIL_USE_TLS = (get_from_env('EMAIL_USE_TLS', '0') == '0')
-#EMAIL_USE_TLS = get_from_env('EMAIL_USE_TLS', '1')
 
 # to use AWS Simple Email Service
 # in which case environment should contain
@@ -339,12 +331,10 @@ TEST_RUNNER = 'djcelery.contrib.test_runner.CeleryTestSuiteRunner'
 # this effectively does CELERY_ALWAYS_EAGER = True
 
 # see configuration example at https://pythonhosted.org/django-auth-ldap/example.html
-AUTH_LDAP_SERVER_URI = "ldap://vml-ldap01.epm.br" # replace by your Ldap URI
-AUTH_LDAP_BIND_DN = "cn=admin,dc=unifesp,dc=br"
-AUTH_LDAP_BIND_PASSWORD = "5S49e1tt"
-AUTH_LDAP_USER_SEARCH = LDAPSearch("dc=unifesp,dc=br",
-    ldap.SCOPE_SUBTREE, "(uid=%(user)s)"
-)
+AUTH_LDAP_SERVER_URI = get_from_env('AUTH_LDAP_SERVER_URI', '')
+AUTH_LDAP_BIND_DN = get_from_env('AUTH_LDAP_BIND_DN','')
+AUTH_LDAP_BIND_PASSWORD = get_from_env('AUTH_LDAP_BIND_PASSWORD','')
+AUTH_LDAP_USER_SEARCH = LDAPSearch(get_from_env('AUTH_LDAP_USER_SEARCH',''), ldap.SCOPE_SUBTREE, "(uid=%(user)s)")
 
 AUTH_LDAP_USER_ATTR_MAP = {
     "first_name": "cn",
