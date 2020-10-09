@@ -62,10 +62,29 @@ Se necessário, altere o IP no arquivo settings.py na pasta /helios-server, espe
 ALLOWED_HOSTS = get_from_env('ALLOWED_HOSTS', '*').split(",")
 ```
 
-### Faça os ajustes no settings.py
+### Ajustes no .ENV
 
-O settings.py já estabelece a conexão do container postgresql (heliosbd).
-Entretanto, demais ajustes para envio de email, ldap, etc. devem ser realizados.
+Crie o arquivo .ENV no seguinte formanto:
+```
+#POSTGRES
+POSTGRES_DB= banco
+POSTGRES_USER= usuario
+POSTGRES_PASSWORD= senha
+POSTGRES_HOST= host
+POSTGRES_PORT= 5432
+PGDATA= /var/lib/postgresql/data
+AUTH_METHOD= md5
+
+#DJANGO
+SITE_TITLE='SISTEMA DE VOTAÇÃO'
+ADMINS_NAME='STI UNIFESP'
+ADMINS_EMAIL= 'sti@unifesp.br'
+SECRET_KEY=j-s8n7m2)l-jn4rpxhxg+d%go#!hbhsb-$z233oemm@8+um6hs
+
+PORT_HOST=8080
+```
+se necessário, crie novos parâmetros e ajuste no docker-compose, no settings.py
+a nova variável também deve ser incluída Ex: os.getenv('POSTGRES_DB')
 
 
 ### Volumes
