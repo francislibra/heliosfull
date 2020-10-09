@@ -26,8 +26,8 @@ TEMPLATE_DEBUG = DEBUG
 #More info: https://docs.djangoproject.com/en/1.7/ref/settings/#allowed-hosts
 
 # set a value for production environment, alongside with debug set to false
-ALLOWED_HOSTS = get_from_env('ALLOWED_HOSTS', '*').split(",")
-
+#ALLOWED_HOSTS = get_from_env('ALLOWED_HOSTS', '*').split(",")
+ALLOWED_HOSTS = get_from_env('ALLOWED_HOSTS', 'h-votacao.unifesp.br').split(",")
 
 # Make this unique, and don't share it with anybody.
 #SECRET_KEY = get_from_env('SECRET_KEY', 'j-s8n7m2)l-jn4rpxhxg+d%go#!hbhsb-$z233oemm@8+um6hs')
@@ -224,14 +224,14 @@ LOGOUT_ON_CONFIRMATION = True
 # The two hosts are here so the main site can be over plain HTTP
 # while the voting URLs are served over SSL.
 #URL_HOST = get_from_env("URL_HOST", SECURE_URL_HOST).rstrip("/")
-URL_HOST = get_from_env("URL_HOST", "http://votacao.unifesp.br:8000").rstrip("/")
+URL_HOST = get_from_env("URL_HOST", "https://h-votacao.unifesp.br").rstrip("/")
+
 
 
 # IMPORTANT: you should not change this setting once you've created
 # elections, as your elections' cast_url will then be incorrect.
 # SECURE_URL_HOST = "https://localhost:8443"
 SECURE_URL_HOST = get_from_env("SECURE_URL_HOST", URL_HOST).rstrip("/")
-#SECURE_URL_HOST = get_from_env("SECURE_URL_HOST", "https://votacao.unifesp.br:8443").rstrip("/")
 
 # election stuff
 SITE_TITLE = get_from_env('SITE_TITLE', _('UNIFESP - Sistema de Votação Eletrôncia'))
