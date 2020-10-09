@@ -29,6 +29,16 @@ services:
     expose:
       - 443
       - 80
+    environment:
+      POSTGRES_HOST: ${POSTGRES_HOST}
+      POSTGRES_DB: ${POSTGRES_DB}      
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      SECRET_KEY: ${SECRET_KEY}
+      SITE_TITLE: ${SITE_TITLE}
+      ADMINS_NAME: ${ADMINS_NAME}
+      ADMINS_EMAIL: ${ADMINS_EMAIL}
     volumes:
       - ./volumes/helios-server:/home/eleicao
       - ./volumes/apache:/etc/apache2/sites-available

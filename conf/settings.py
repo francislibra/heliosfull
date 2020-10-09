@@ -39,8 +39,7 @@ ROOT_PATH = os.path.dirname(__file__)
 # add admins of the form: 
 #    ('Ben Adida', 'ben@adida.net'),
 # if you want to be emailed about errors.
-ADMINS = ('STI UNIFESP', 'sti@unifesp.br'
-)
+ADMINS = ('STI UNIFESP', 'sti@unifesp.br')
 
 MANAGERS = ADMINS
 
@@ -61,7 +60,7 @@ DATABASES = {
         'NAME': 'helios',
         'USER': 'helios',
         'PASSWORD': 'helios',
-        'HOST': 'heliosbd',
+        'HOST': '',
         'PORT': '5432',
     }
 }

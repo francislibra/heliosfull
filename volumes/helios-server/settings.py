@@ -26,11 +26,12 @@ TEMPLATE_DEBUG = DEBUG
 #More info: https://docs.djangoproject.com/en/1.7/ref/settings/#allowed-hosts
 
 # set a value for production environment, alongside with debug set to false
-#ALLOWED_HOSTS = get_from_env('ALLOWED_HOSTS', 'localhost').split(",")
 ALLOWED_HOSTS = get_from_env('ALLOWED_HOSTS', '*').split(",")
 
+
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = get_from_env('SECRET_KEY', 'j-s8n7m2)l-jn4rpxhxg+d%go#!hbhsb-$z233oemm@8+um6hs')
+#SECRET_KEY = get_from_env('SECRET_KEY', 'j-s8n7m2)l-jn4rpxhxg+d%go#!hbhsb-$z233oemm@8+um6hs')
+SECRET_KEY = os.getenv('SECRET_KEY')
 ROOT_URLCONF = 'urls'
 
 ROOT_PATH = os.path.dirname(__file__)
@@ -38,8 +39,8 @@ ROOT_PATH = os.path.dirname(__file__)
 # add admins of the form: 
 #    ('Ben Adida', 'ben@adida.net'),
 # if you want to be emailed about errors.
-ADMINS = ('STI UNIFESP', 'sti@unifesp.br'
-)
+#ADMINS = ('STI UNIFESP', 'sti@unifesp.br')
+ADMINS = (os.getenv('ADMINS_NAME'), os.getenv('ADMINS_EMAIL'))
 
 MANAGERS = ADMINS
 
@@ -57,11 +58,11 @@ SHOW_USER_INFO = (get_from_env('SHOW_USER_INFO', '1') == '1')
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'helios',
-        'USER': 'helios',
-        'PASSWORD': 'helios',
-        'HOST': 'heliosbd',
-        'PORT': '5432',
+        'NAME': os.getenv('POSTGRES_DB'),
+        'USER': os.getenv('POSTGRES_USER'),
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
+        'HOST': os.getenv('POSTGRES_HOST'),
+        'PORT': os.getenv('POSTGRES_PORT'),
     }
 }
 SOUTH_DATABASE_ADAPTERS = {'default':'south.db.postgresql_psycopg2'}
@@ -224,7 +225,7 @@ LOGOUT_ON_CONFIRMATION = True
 # while the voting URLs are served over SSL.
 #URL_HOST = get_from_env("URL_HOST", SECURE_URL_HOST).rstrip("/")
 URL_HOST = get_from_env("URL_HOST", "http://votacao.unifesp.br:8000").rstrip("/")
-#URL_HOST = ["http://votacao.unifesp.br:8000", "http://vml038.epm.br:8000"]
+
 
 # IMPORTANT: you should not change this setting once you've created
 # elections, as your elections' cast_url will then be incorrect.

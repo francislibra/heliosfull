@@ -1,5 +1,4 @@
 #https://subscription.packtpub.com/book/web_development/9781788837682/1/ch01lvl1sec15/creating-a-docker-project-file-structure
-cp conf/settings.py volumes/helios-server/settings.py
 docker-compose exec heliosapp python manage.py syncdb
 docker-compose exec heliosapp python manage.py migrate
 docker-compose exec -u root heliosapp python manage.py compilemessages 
