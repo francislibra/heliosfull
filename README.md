@@ -38,7 +38,7 @@ docker e docker-compose:
     docker-compose ps
     ```
 
-### Execute o script (start.sh) para executação das migrations
+### Execute o script start.sh
 
 ```
 ./start.sh
@@ -56,7 +56,7 @@ Abra o navegador e acesse:
 http://localhost:8080.
 ```
 
-Se necessário, altere o IP no arquivo settings.py na pasta /helios-server, especificamente no parâmetro:
+Se necessário, altere o IP no arquivo settings.py na pasta /volumes/helios-server, especificamente no parâmetro:
 
 ```
 ALLOWED_HOSTS = get_from_env('ALLOWED_HOSTS', '*').split(",")
@@ -99,9 +99,8 @@ Todos os mapeamentos estão na pasta /volumes.  São eles:
 
 
 ## Ajustes futuros
-
-1. Migração para alpine
-2. Adição da camada de load balance com nginx
-3. Separação do apache ou nginx
-4. Aprimorar processo de inicialização do container
-
+```
+Migração para alpine
+Adição da camada de load balance com nginx
+Separação do apache ou nginx
+```
