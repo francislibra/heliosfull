@@ -1,5 +1,10 @@
 FROM python:2.7
 
+ARG userid=1001
+ARG groupid=1001
+ARG user=helios
+ARG dir=eleicao
+
 RUN apt-get update && \
     apt-get install -y -q \
     python-ldap \
@@ -14,12 +19,14 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get clean
 
-RUN mkdir /home/eleicao && \
-    mkdir /var/log/eleicao
+RUN groupadd -g $groupid,www-data $userid && \
+    useradd -d /home/$dir -s /bin/bash -m $user -u $userid -g $groupid && \
+    chown ${user}:${groupid} -R /home/$dir && \
+    mkdir /var/log/$dir
 
-COPY volumes/helios-server /home/eleicao
+COPY volumes/helios-server /home/$dir
 
-RUN cd /home/eleicao &&\
+RUN cd /home/$dir &&\
     pip install -r requirements.txt   
 
 
@@ -35,10 +42,10 @@ RUN a2enmod rewrite && \
     a2dissite 000-default.conf && \    
     a2ensite eleicao-ssl.conf && \
     a2ensite eleicao.conf && \
-    service apache2 restart
+    service apache2 restart 
 
-WORKDIR /home/eleicao    
+WORKDIR /home/$dir    
 EXPOSE 80
 EXPOSE 443
-
+USER $user
 CMD ["/usr/sbin/apache2", "-D", "FOREGROUND"] 

@@ -49,18 +49,14 @@ Esse script executa a migration do django e ajustes na tabela auth_users.
 
 ### Execução
 
-O container será executado na porta 8080 do host mas será redirecionado para 443 (https)
+O container será executado na porta 8080 do host e será redirecionado para 443 (https)
 
 Abra o navegador e acesse:
 ```
 http://localhost:8080.
 ```
+A porta pode ser alterada no .ENV ou diretamente no docker-compose.
 
-Se necessário, altere o IP no arquivo settings.py na pasta /volumes/helios-server, especificamente no parâmetro:
-
-```
-ALLOWED_HOSTS = get_from_env('ALLOWED_HOSTS', '*').split(",")
-```
 
 ### Ajustes no .ENV
 
@@ -83,8 +79,10 @@ SECRET_KEY=j-s8n7m2)l-jn4rpxhxg+d%go#!hbhsb-$z233oemm@8+um6hs
 
 PORT_HOST=8080
 ```
-se necessário, crie novos parâmetros e ajuste no docker-compose, no settings.py
-a nova variável também deve ser incluída Ex: os.getenv('POSTGRES_DB')
+Se necessário, crie novos parâmetros
+.
+No settings.py a nova variável também deve ser incluída, verifique se existe o parâmetro "get_from_env".
+Ex: get_from_env('POSTGRES_DB')
 
 
 ### Volumes
@@ -97,7 +95,22 @@ Todos os mapeamentos estão na pasta /volumes.  São eles:
     - ./volumes/certs:/etc/ssl/private-unifesp
     - ./volumes/bd:/var/lib/postgresql/data
 
+### Fixando o IPs
+Exemplo de configuração do Docker-Compose
+```
+networks:
+  heliosnetwork:
+    driver: bridge
+    ipam:
+     config:
+       - subnet: 10.8.0.0/16
+         gateway: 10.8.0.1
+         aux_adressess:
+            heliosbd: 10.8.0.2
+            heliiosapp: 10.8.0.3
+```
 
+    
 ## Ajustes futuros
 ```
 Migração para alpine
