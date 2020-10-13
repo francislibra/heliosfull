@@ -1,9 +1,10 @@
 FROM python:2.7
 
-ARG userid=1001
-ARG groupid=1001
-ARG user=helios
-ARG dir=eleicao
+ARG uid
+ARG gid
+ARG user
+ARG group
+ARG dir
 
 RUN apt-get update && \
     apt-get install -y -q \
@@ -19,16 +20,16 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get clean
 
-RUN groupadd -g $groupid,www-data $userid && \
-    useradd -d /home/$dir -s /bin/bash -m $user -u $userid -g $groupid && \
-    chown ${user}:${groupid} -R /home/$dir && \
+RUN groupadd -g $gid $group  &&\    
+    useradd -d /home/$dir -u $uid -g $gid -m -s /bin/bash $user && \        
+    chown ${user}:$group -R /home/$dir && \
+    chmod 0775 -R /home/$dir && \
     mkdir /var/log/$dir
 
 COPY volumes/helios-server /home/$dir
 
 RUN cd /home/$dir &&\
     pip install -r requirements.txt   
-
 
 COPY volumes/certs/unifesp.key /etc/ssl/private-unifesp/unifesp.key
 COPY volumes/certs/intermediate.pem /etc/ssl/private-unifesp/intermediate.pem
@@ -47,5 +48,5 @@ RUN a2enmod rewrite && \
 WORKDIR /home/$dir    
 EXPOSE 80
 EXPOSE 443
-USER $user
+#USER $user
 CMD ["/usr/sbin/apache2", "-D", "FOREGROUND"] 

@@ -16,8 +16,10 @@ def get_from_env(var, default):
     else:
         return default
 
-DEBUG = (get_from_env('DEBUG', '0'))
+
+DEBUG = False
 #DEBUG = (get_from_env('DEBUG', '0') == '0')
+
 TEMPLATE_DEBUG = DEBUG
 
 #If the Host header (or X-Forwarded-Host if USE_X_FORWARDED_HOST is enabled) does not match any value in this list, the django.http.HttpRequest.get_host() method will raise SuspiciousOperation.

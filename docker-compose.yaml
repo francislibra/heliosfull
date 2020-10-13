@@ -17,6 +17,12 @@ services:
     build:
       dockerfile: Helios.Dockerfile
       context: .
+      args:
+        - uid=${uid}
+        - gid=${gid}
+        - user=${user}
+        - group=${group}
+        - dir=${dir}
     image: helios
     container_name: heliosapp
     ports:
