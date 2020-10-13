@@ -1,9 +1,8 @@
-#https://subscription.packtpub.com/book/web_development/9781788837682/1/ch01lvl1sec15/creating-a-docker-project-file-structure
 #backup
 #docker-compose exec heliosbd pg_dump -U helios helios > bkp_helios.sql
 
 #restore / usuário-senha: root-admin
-#cat bkp_helios.sql | docker-compose exec -T heliosbd psql -d helios -U helios
+cat bkp_helios.sql | docker-compose exec -T heliosbd psql -d helios -U helios
 
 #docker-compose exec heliosapp python manage.py syncdb
 #docker-compose exec heliosapp python manage.py migrate
