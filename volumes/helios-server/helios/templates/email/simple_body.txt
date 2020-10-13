@@ -22,11 +22,14 @@ Autentique-se com sua conta de usuário {{voter.voter_type}}.
 <br><br>
 --
 <br>
-<font style="" size="1" face="verdana, sans-serif"><b style="">Instituto Federal de Santa Catarina - Reitoria</b>
+<font style="" size="1" face="verdana, sans-serif"><b style="">Universidade Federal de São Paulo - Unifesp</b>
 </font>
 <br>
-<font style="" size="1" face="verdana, sans-serif">Rua 14 de Julho, 150, Coqueiros, Florianópolis / SC - CEP: 88075-010</font>
+<font style="" size="1" face="verdana, sans-serif">
+    Rua Sena Madureira, n.º 1.500 - Vila Clementino - São Paulo - SP 
+</font>
 <br>
-<u><a href="http://www.ifsc.edu.br" target="_blank" style=""><font style="" face="verdana, sans-serif">www.ifsc.edu.br</font></a></u>
+<u><a href="https://www.unifesp.br" target="_blank" style=""><font style="" face="verdana, sans-serif">www.unifesp.br</font></a>
+</u>
 </body>
 </html>
