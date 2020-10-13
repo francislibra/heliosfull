@@ -44,7 +44,9 @@ docker e docker-compose:
 ./start.sh
 ```
 
-Esse script executa a migration do django e ajustes na tabela auth_users.
+Esse script executa restaura o banco de dados (arquivo heliosbd.sql) e inicia os serviços supervisor e celeryd.
+
+Usuário e senha iniciais do Django: root/admin. 
 
 
 ### Execução
@@ -63,10 +65,10 @@ A porta pode ser alterada no .ENV ou diretamente no docker-compose.
 Crie o arquivo .ENV no seguinte formanto:
 ```
 #POSTGRES
-POSTGRES_DB= banco
-POSTGRES_USER= usuario
-POSTGRES_PASSWORD= senha
-POSTGRES_HOST= host
+POSTGRES_DB= database
+POSTGRES_USER= user
+POSTGRES_PASSWORD= password
+POSTGRES_HOST= heliosbd
 POSTGRES_PORT= 5432
 PGDATA= /var/lib/postgresql/data
 AUTH_METHOD= md5
@@ -75,9 +77,29 @@ AUTH_METHOD= md5
 SITE_TITLE='SISTEMA DE VOTAÇÃO'
 ADMINS_NAME='STI UNIFESP'
 ADMINS_EMAIL= 'sti@unifesp.br'
-SECRET_KEY=j-s8n7m2)l-jn4rpxhxg+d%go#!hbhsb-$z233oemm@8+um6hs
-
+SECRET_KEY=generatekey
 PORT_HOST=8080
+DEBUG = 0
+ALLOWED_HOSTS = 'localhost'
+URL_HOST = https://localhost
+
+AUTH_LDAP_SERVER_URI = ldap://server.br
+AUTH_LDAP_BIND_DN = "cn=admin,dc=unifesp,dc=br"
+AUTH_LDAP_BIND_PASSWORD = password
+AUTH_LDAP_USER_SEARCH = dc=unifesp,dc=br
+
+EMAIL_HOST = smtp-relay.gmail.com
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'votacao.helios@unifesp.br'
+EMAIL_HOST_PASSWORD = 'password'
+EMAIL_USE_TLS = 0
+
+#CONTAINER: user, group
+uid=1001
+gid=1001
+user=helios
+group=helios
+dir=eleicao
 ```
 Se necessário, crie novos parâmetros
 .
