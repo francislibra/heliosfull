@@ -24,7 +24,7 @@ docker e docker-compose:
 - acesse a pasta criada e execute:
 
     ```
-    docker-compose -u -d
+    docker-compose -up -d
     ```
 
 - serão criados dois containers:
